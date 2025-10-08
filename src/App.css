@@ -1,4 +1,4 @@
-/* .App {
+.App {
   text-align: center;
 }
 
@@ -28,16 +28,4 @@
 
 .small {
   font-size: 0.75rem;
-} */
-
-
-
-
-
-body {
-  background-color: #282c34;
-}
-
-h1 {
-  color: #0d6efd;
 }
