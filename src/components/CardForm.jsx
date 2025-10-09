@@ -12,7 +12,7 @@ const CardForm = () => {
           </div>
           <div class='container-md row gx-5'>
             <div class='col'>
-              <div class="p-3">
+              <div class="hstack gap-4">
                 <button class='btn btn-outline-primary'>Option1</button>
                 <button class='btn btn-outline-primary'>Option2</button>
                 <button class='btn btn-outline-primary'>Option3</button>

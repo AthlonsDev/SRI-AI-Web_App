@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card } from 'react-bootstrap';
 
-const CardItem = (param) => {
+const CardItem = () => {
   return (
    <Card className="shadow-sm">
         <img src='' class='card-img-top'alt=''/>
