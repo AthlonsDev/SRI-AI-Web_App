@@ -5,6 +5,8 @@ import numpy as np
 
 from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # or ["http://localhost:5173"] for Vite
@@ -13,13 +15,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app = FastAPI()
-
 # Load model at startup
 @app.on_event("startup")
 def load_model():
     global model
-    model = joblib.load("model.pkl") #load pkl model
+    # model = joblib.load("model.pkl") #load pkl model
 
 # Define request schema
 class InputData(BaseModel):
@@ -28,8 +28,9 @@ class InputData(BaseModel):
 @app.post("/predict")
 def predict(data: InputData):
     try:
-        x = np.array([data.features])
-        prediction = model.predict(x)
-        return {"prediction": prediction.tolist()}
+        # x = np.array([data.features])
+        # prediction = model.predict(x)
+        # return {"prediction": prediction.tolist()}
+        print("API Works")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

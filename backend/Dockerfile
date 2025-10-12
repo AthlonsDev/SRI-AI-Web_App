@@ -1,6 +1,9 @@
 # Use an official Python image
 FROM python:3.11-slim
 
+# Use PyTorch base image (includes Python + PyTorch + deps)
+# FROM pytorch/pytorch:2.4.0-cpu
+
 # Set working directory inside the container
 WORKDIR /app
 
