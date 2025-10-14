@@ -25,12 +25,17 @@ def load_model():
 class InputData(BaseModel):
     features: list[float]
 
+
+@app.get("/")
+def read_root():
+    return {"message": "API is running"}
+
 @app.post("/predict")
 def predict(data: InputData):
     try:
         # x = np.array([data.features])
         # prediction = model.predict(x)
         # return {"prediction": prediction.tolist()}
-        print("API Works")
+        return {"message": "API Works fine"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

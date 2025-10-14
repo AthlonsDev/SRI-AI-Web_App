@@ -12,7 +12,7 @@ export default function Model_1(){
         <Sidebar/>
             <div class="text-center">
                 <h1>Model 1</h1>
-                <h2>Prediction - </h2>
+                <h2>Prediction - {getPrediction}</h2>
             </div>
 
             {/* Load model API */}
