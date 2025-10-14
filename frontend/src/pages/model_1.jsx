@@ -14,12 +14,13 @@ export default function Model_1(){
 
     useEffect(() => {
         // Example features, replace with real input
-        const features = [1, 2, 3, 4];
+        const features = ['example_feature1', 'example_feature2'];
         getPrediction(features).then((data) => {
             setPrediction(data.message || data.prediction);
         });
     }, []);
 
+    
     return(
         <>
         {/* Sidebar Menu */}

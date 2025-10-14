@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export async function getPrediction(features) {
-  const response = await fetch(`${API_URL}/predict`, {
+  const response = await fetch(`${API_URL}/speech`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ features }),
