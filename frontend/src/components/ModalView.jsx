@@ -1,6 +1,6 @@
 import React from "react";
 
-const ModalViewText = () => {
+const ModalViewText = (param) => {
     return (
         <>
             <div class='mx-auto p-4 text-center'>
@@ -15,9 +15,7 @@ const ModalViewText = () => {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    This is some placeholder content to show the scrolling behavior for modals. We use repeated line breaks to demonstrate how content can exceed minimum inner height, thereby showing inner scrolling. When content becomes longer than the predefined max-height of modal, content will be cropped and scrollable within the modal.
-                    This is some placeholder content to show the scrolling behavior for modals. We use repeated line breaks to demonstrate how content can exceed minimum inner height, thereby showing inner scrolling. When content becomes longer than the predefined max-height of modal, content will be cropped and scrollable within the modal.
-
+                    {param.text}
 
                 </div>
                 <div class="modal-footer">
