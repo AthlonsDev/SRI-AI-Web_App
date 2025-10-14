@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import joblib  # or pickle
 import numpy as np
+# from speech_model import load_model
+
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,6 +27,9 @@ def load_model():
 class InputData(BaseModel):
     features: list[float]
 
+class SpeechInputData(BaseModel):
+    features: list[str]
+
 
 @app.get("/")
 def read_root():
@@ -37,5 +42,15 @@ def predict(data: InputData):
         # prediction = model.predict(x)
         # return {"prediction": prediction.tolist()}
         return {"message": "API Works fine"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@app.post("/speech")
+def speech_recognition(data: SpeechInputData):
+    try:
+        # audio_input = data.features[0]  # Assuming single audio input for simplicity
+        # result = model(audio_input) #get results from model
+        # return {"transcription": result['text']} #return a text of the speech
+        return {"message": "Speech endpoint works fine"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
