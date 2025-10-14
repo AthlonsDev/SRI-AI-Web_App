@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import ModalViewText from './ModalView';
 
-const CardFile = () => {
+const CardFile = (param) => {
   return (
     <Card className="shadow-sm">
       <Card.Body>
@@ -21,7 +21,7 @@ const CardFile = () => {
                     <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
                 </div>
               <div class='text-center'>
-                <ModalViewText/>
+                <ModalViewText text={param.text}/>
                 <button type='button' class='btn btn-outline-primary'>Save</button>
               </div>
           </div>
