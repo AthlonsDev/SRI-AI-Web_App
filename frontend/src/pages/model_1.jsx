@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import CardFile from "../components/CardFile";
 import CardForm from "../components/CardForm";
 import Sidebar from "../components/Sidebar";
-import { getPrediction } from "../api";
+import { getSpeech } from "../api";
 import axios from 'axios'
 import { useEffect, useState } from "react";
 
@@ -15,7 +15,7 @@ export default function Model_1(){
     useEffect(() => {
         // Example features, replace with real input
         const features = ['example_feature1', 'example_feature2'];
-        getPrediction(features).then((data) => {
+        getSpeech(features).then((data) => {
             setPrediction(data.message || data.prediction);
         });
     }, []);

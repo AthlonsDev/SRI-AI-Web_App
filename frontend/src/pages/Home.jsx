@@ -1,12 +1,21 @@
 import React from "react";
-import { Container, Navbar, Nav, Button } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 import CardForm from "../components/CardForm";
 import CardItem from "../components/CardItem";
 import Sidebar from "../components/Sidebar";
+import { useState } from "react";
+
+import { getSearch } from "../api";
 
 
 export default function Home() {
+    const [query, setQuery] = useState(null);
+    const handleSend = async (inputValue) => {
+        // Call getSearch with the input value as features
+        const title = [inputValue];
+        const data = await getSearch(title);
+        setQuery(data.message || data.prediction);
+    };
+
     return (
         <>
         {/* Sidebar Menu */}
@@ -19,21 +28,22 @@ export default function Home() {
                 </div>
                 {/* Form layout */}
                 <div class='container-fluid'>
-                <CardForm/>
+                <CardForm onSend={handleSend} />
                 </div>
                 <div class='text-center'>
-                <h1>Search results</h1>
+                {/* <h1>Search results: {query}</h1> */}
+                
                 </div>
                 <div class="container-fluid">
-                    <div class='row row-cols-3'>
+                    <div class='row row-cols-2'>
                     <div class="col">
-                        <CardItem/>
+                        <CardItem text={query ? query: "Loading..."}/>
                     </div>
                     <div class="col">
-                        <CardItem/>
+                        {/* <CardItem/> */}
                     </div>
                     <div class="col">
-                        <CardItem/>
+                        {/* <CardItem/> */}
                     </div>
                     </div>
                 </div>  
