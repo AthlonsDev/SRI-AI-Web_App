@@ -32,9 +32,7 @@ class SpeechInputData(BaseModel):
     features: list[str]
 
 class SearchInputData(BaseModel):
-    # features: list[str]
-    title: list[str]
-    # author: str
+    features: list[str]
 
 
 
@@ -46,13 +44,13 @@ def read_root():
 @app.post('/search')
 def search(data: SearchInputData):
     try:
-        results = search_json("data.json", data.title[0])
+        results = search_json("data.json", data.features[0])
         # print(data.features)
 
         for res in results:
             title = res.get("title", "No Title") if isinstance(res, dict) else "No Title"
             author = res.get("author", "Unknown") if isinstance(res, dict) else "Unknown"
-            return {"message": f"Found '{title}"}  
+            return {"message": f"Found '{res}'"}  
               
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
