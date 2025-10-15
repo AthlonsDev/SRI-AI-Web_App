@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import joblib  # or pickle
 import numpy as np
 # from speech_model import load_model
+from search_eng import search_json
 
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,10 +31,31 @@ class InputData(BaseModel):
 class SpeechInputData(BaseModel):
     features: list[str]
 
+class SearchInputData(BaseModel):
+    # features: list[str]
+    title: list[str]
+    # author: str
+
+
+
 
 @app.get("/")
 def read_root():
     return {"message": "API is running"}
+
+@app.post('/search')
+def search(data: SearchInputData):
+    try:
+        results = search_json("data.json", data.title[0])
+        # print(data.features)
+
+        for res in results:
+            title = res.get("title", "No Title") if isinstance(res, dict) else "No Title"
+            author = res.get("author", "Unknown") if isinstance(res, dict) else "Unknown"
+            return {"message": f"Found '{title}"}  
+              
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/predict")
 def predict(data: InputData):
@@ -52,5 +74,6 @@ def speech_recognition(data: SpeechInputData):
         # result = model(audio_input) #get results from model
         # return {"transcription": result['text']} #return a text of the speech
         return {"message": "Speech endpoint works fine"}
+    
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
