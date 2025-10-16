@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import ModalViewText from './ModalView';
+import ModalViewText from './ModalViewText';
 
 const CardFile = (param) => {
   return (
