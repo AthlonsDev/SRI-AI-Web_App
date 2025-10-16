@@ -13,7 +13,12 @@ def search_json(data, query):
     results = []
     # iterate through json and search for query in title or author
     for record in data:
+        # search in title
         if query.lower() in record.get('title', '').lower() or query.lower() in record.get('author', '').lower():
             print(f"Found match: {record.get('title', 'No Title')} by {record.get('author', 'Unknown')}")
             results.append(record)
-    return results if results else 'nothing found'
+        # seaerch in body text
+        # elif query.lower() in record.get('text', '').lower():
+        #     print(f"Found match in text: {record.get('title', 'No Title')} by {record.get('author', 'Unknown')}")
+        #     results.append(record)
+    return results
