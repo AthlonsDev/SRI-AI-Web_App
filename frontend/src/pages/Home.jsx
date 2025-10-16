@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CardForm from "../components/CardForm";
 import CardItem from "../components/CardItem";
 import Sidebar from "../components/Sidebar";
@@ -11,9 +11,10 @@ export default function Home() {
     const [query, setQuery] = useState(null);
     const handleSend = async (inputValue) => {
         // Call getSearch with the input value as features
-        const title = [inputValue];
-        const data = await getSearch(title);
-        setQuery(data.message || data.prediction);
+        const res = [inputValue];
+        const data = await getSearch(res);
+        const resArray = Array.isArray(data) ? data : [data];
+        setQuery(resArray);
     };
 
     return (
@@ -31,13 +32,23 @@ export default function Home() {
                 <CardForm onSend={handleSend} />
                 </div>
                 <div class='text-center'>
-                {/* <h1>Search results: {query}</h1> */}
+                {/* <h1>Search results: {}</h1> */}
                 
                 </div>
                 <div class="container-fluid">
                     <div class='row row-cols-2'>
                     <div class="col">
-                        <CardItem text={query ? query: "Loading..."}/>
+                        <p>Found {query?.length} results</p>
+                        {query?.map((item, index) => (
+                              <div key={index}>
+                                <CardItem text={JSON.stringify(item.title, null, 2) ? JSON.stringify(item.title, null, 2): "Loading..."}/>
+                            </div>
+                        ))}
+                        {/* <CardItem text={JSON.stringify(query?.title, null, 2) ? JSON.stringify(query?.title, null, 2): "Loading..."}/> */}
+                        {/* {query?.length > 0 && (
+                             <p>Found {query?.length} results:</p>
+                            // <CardItem text={JSON.stringify(query.title, null, 2) ? JSON.stringify(query.title, null, 2): "Loading..."}/>
+                        )} */}
                     </div>
                     <div class="col">
                         {/* <CardItem/> */}

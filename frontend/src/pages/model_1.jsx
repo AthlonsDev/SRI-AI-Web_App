@@ -16,7 +16,8 @@ export default function Model_1(){
         // Example features, replace with real input
         const features = ['example_feature1', 'example_feature2'];
         getSpeech(features).then((data) => {
-            setPrediction(data.message || data.prediction);
+            // setPrediction(data.message || data.prediction);
+            
         });
     }, []);
 
