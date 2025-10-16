@@ -24,38 +24,23 @@ export default function Home() {
             {/* Page Body */}
                 {/* Title - Central align */}
                 <div class="text-center">
-                <h1>Title</h1>
+                    <h1>Title</h1>
                 {/* <Link to="/model_1">Link</Link> */}
                 </div>
                 {/* Form layout */}
                 <div class='container-fluid'>
-                <CardForm onSend={handleSend} />
-                </div>
-                <div class='text-center'>
-                {/* <h1>Search results: {}</h1> */}
-                
+                    <CardForm onSend={handleSend} />
                 </div>
                 <div class="container-fluid">
+                    <p>Found {query?.length} results</p>
                     <div class='row row-cols-2'>
-                    <div class="col">
-                        <p>Found {query?.length} results</p>
                         {query?.map((item, index) => (
-                              <div key={index}>
-                                <CardItem text={JSON.stringify(item.title, null, 2) ? JSON.stringify(item.title, null, 2): "Loading..."}/>
+                            <div key={index}>
+                                    <CardItem data={
+                                        item ? item :"Loading..."}
+                                    />
                             </div>
                         ))}
-                        {/* <CardItem text={JSON.stringify(query?.title, null, 2) ? JSON.stringify(query?.title, null, 2): "Loading..."}/> */}
-                        {/* {query?.length > 0 && (
-                             <p>Found {query?.length} results:</p>
-                            // <CardItem text={JSON.stringify(query.title, null, 2) ? JSON.stringify(query.title, null, 2): "Loading..."}/>
-                        )} */}
-                    </div>
-                    <div class="col">
-                        {/* <CardItem/> */}
-                    </div>
-                    <div class="col">
-                        {/* <CardItem/> */}
-                    </div>
                     </div>
                 </div>  
         </>

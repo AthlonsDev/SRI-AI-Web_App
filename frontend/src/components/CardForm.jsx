@@ -26,11 +26,12 @@ const CardForm = ({ onSend }) => {
           </div>
           <div class='container-md row gx-5'>
             <div class='col'>
-              <div class="hstack gap-4">
-                <button class='btn btn-outline-primary'>Option1</button>
-                <button class='btn btn-outline-primary'>Option2</button>
-                <button class='btn btn-outline-primary'>Option3</button>
-              </div>
+              <h4 class='text-center'>Search By</h4>
+                <div class="hstack gap-5">
+                  <button class='btn btn-outline-primary'>Title</button>
+                  <button class='btn btn-outline-primary'>Author</button>
+                  <button class='btn btn-outline-primary'>Content</button>
+                </div>
             </div>
           </div>
       </Card.Body>
