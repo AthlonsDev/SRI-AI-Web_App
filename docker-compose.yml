@@ -8,12 +8,15 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - PYTHONUNBUFFERED=1
+      # - PYTHONUNBUFFERED=1
+          command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload #for development
+
 
   frontend:
-    build: ./frontend
-    container_name: Dockerfile
-    ports:
-      - "5173:80"
-    depends_on:
-      - backend
+      image: react-frontend:latest
+      container_name: frontend_dev
+      ports:
+        - "3000:3000"
+      depends_on:
+        backend:
+          condition: service_started

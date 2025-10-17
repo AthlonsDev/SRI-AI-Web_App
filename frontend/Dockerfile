@@ -1,15 +1,20 @@
-# Use Node image to build the React app
-FROM node:20 AS build
+# Use an official Node image
+FROM node:20
 
+# Set working directory
 WORKDIR /app
+
+# Copy dependency files first (for caching)
 COPY package*.json ./
-RUN npm install
+
+# Clean install dependencies
+RUN npm ci --legacy-peer-deps
+
+# Copy the rest of the source code
 COPY . .
-RUN npm run build
 
-# Use Nginx to serve the static files
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+# Expose the default port
+EXPOSE 3000
 
-# Expose port 80 for the frontend
-EXPOSE 80
+# Run the development server
+CMD ["npm", "start"]

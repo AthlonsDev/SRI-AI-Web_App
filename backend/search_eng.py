@@ -9,7 +9,7 @@ def read_json(file_path):
           return data
 
 def search_json(data, query):
-    data = read_json("pdf_data.json")
+    data = read_json("SRI_Dataset_2.jsonl")
     results = []
     # iterate through json and search for query in title or author
     for record in data:
