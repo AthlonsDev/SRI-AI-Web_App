@@ -64,6 +64,7 @@ def predict(data: InputData):
     
 @app.post("/speech")
 def speech_recognition(data: SpeechInputData):
+    print(data.features[0])
     try:
         # audio_input = data.features[0]  # Assuming single audio input for simplicity
         # result = model(audio_input) #get results from model
