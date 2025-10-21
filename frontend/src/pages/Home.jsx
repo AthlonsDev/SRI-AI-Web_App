@@ -9,9 +9,9 @@ import { getSearch } from "../api";
 
 export default function Home() {
     const [query, setQuery] = useState(null);
-    const handleSend = async (inputValue) => {
+    const handleSend = async (inputValue, searchType) => {
         // Call getSearch with the input value as features
-        const res = [inputValue];
+        const res = [inputValue, searchType];
         const data = await getSearch(res);
         const resArray = Array.isArray(data) ? data : [data];
         setQuery(resArray);
@@ -36,9 +36,7 @@ export default function Home() {
                     <div class='row row-cols-2'>
                         {query?.map((item, index) => (
                             <div key={index}>
-                                    <CardItem data={
-                                        item ? item :"Loading..."}
-                                    />
+                                    <CardItem data={item ? item :"Loading..."}/>
                             </div>
                         ))}
                     </div>

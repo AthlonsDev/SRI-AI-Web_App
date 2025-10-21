@@ -8,15 +8,22 @@ def read_json(file_path):
         #   print(f"Title: {title}")
           return data
 
-def search_json(data, query):
+def search_json(data, query, search_type):
     data = read_json("SRI_Dataset_2.jsonl")
     results = []
     # iterate through json and search for query in title or author
     for record in data:
         # search in title
-        if query.lower() in record.get('title', '').lower() or query.lower() in record.get('author', '').lower():
-            print(f"Found match: {record.get('title', 'No Title')} by {record.get('author', 'Unknown')}")
-            results.append(record)
+        if search_type == "Title":
+            if query.lower() in record.get('title', '').lower():
+                results.append(record)
+        if search_type == "Author":
+            if query.lower() in record.get('author', '').lower():
+                results.append(record)
+        if search_type == "Content":
+            if query.lower() in record.get('Content', '').lower():
+                results.append(record)
+
         # seaerch in body text
         # elif query.lower() in record.get('text', '').lower():
         #     print(f"Found match in text: {record.get('title', 'No Title')} by {record.get('author', 'Unknown')}")

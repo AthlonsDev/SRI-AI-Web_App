@@ -3,16 +3,25 @@ import { Card } from 'react-bootstrap';
 import { useState } from "react"; 
 
 const CardForm = ({ onSend }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState([""]);
+  const [searchType, setSearchType] = useState("title")
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleButtonClick = () => {
+  const handleInputButtonClick = () => {
     if (onSend) {
-      onSend(inputValue);
+      onSend(inputValue, searchType);
     }
+  }
+
+  const handleButtonClick = (event) => {
+    setSearchType(event.target.innerText);
+    // if (onSend) {
+    //   onSend(searchType);
+    // }
+
   }
 
 
@@ -22,15 +31,16 @@ const CardForm = ({ onSend }) => {
         <Card.Title class='text-center'>Card</Card.Title>
           <div class='input-group mb-3'>
             <input type='text' class='form-control' placeholder='Search' aria-describedby='button-addon2' value={inputValue} onChange={handleInputChange}/>
-            <button type='button' class='btn btn-outline-secondary' id='button-addon2' onClick={handleButtonClick}>Send</button>
+            <button type='button' class='btn btn-outline-secondary' id='button-addon2' onClick={handleInputButtonClick}>Send</button>
           </div>
           <div class='container-md row gx-5'>
             <div class='col'>
               <h4 class='text-center'>Search By</h4>
                 <div class="hstack gap-5">
-                  <button class='btn btn-outline-primary'>Title</button>
-                  <button class='btn btn-outline-primary'>Author</button>
-                  <button class='btn btn-outline-primary'>Content</button>
+                  <p>{searchType}</p>
+                  <button class='btn btn-outline-primary' onClick={handleButtonClick}>Title</button>
+                  <button class='btn btn-outline-primary' onClick={handleButtonClick}>Author</button>
+                  <button class='btn btn-outline-primary' onClick={handleButtonClick}>Content</button>
                 </div>
             </div>
           </div>

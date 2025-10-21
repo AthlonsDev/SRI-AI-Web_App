@@ -43,8 +43,10 @@ def read_root():
 
 @app.post('/search')
 def search(data: SearchInputData):
+    # print(data.features[1])
+    print(data.features[0])
     try:
-        results = search_json("SRI_Dataset.jsonl", data.features[0])
+        results = search_json("SRI_Dataset.jsonl", data.features[0], data.features[1])
         return results
               
     except Exception as e:
