@@ -18,10 +18,6 @@ const CardForm = ({ onSend }) => {
 
   const handleButtonClick = (event) => {
     setSearchType(event.target.innerText);
-    // if (onSend) {
-    //   onSend(searchType);
-    // }
-
   }
 
 
@@ -37,7 +33,6 @@ const CardForm = ({ onSend }) => {
             <div class='col'>
               <h4 class='text-center'>Search By</h4>
                 <div class="hstack gap-5">
-                  <p>{searchType}</p>
                   <button class='btn btn-outline-primary' onClick={handleButtonClick}>Title</button>
                   <button class='btn btn-outline-primary' onClick={handleButtonClick}>Author</button>
                   <button class='btn btn-outline-primary' onClick={handleButtonClick}>Content</button>

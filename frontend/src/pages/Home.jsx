@@ -36,9 +36,9 @@ export default function Home() {
                     <div class='row row-cols-2'>
                         {query?.map((item, index) => (
                             <div key={index}>
-                                    <CardItem data={item ? item :"Loading..."}/>
+                                    <CardItem data={item ? item :"Loading..." } onSend={handleSend}/>
                             </div>
-                        ))}
+                        ))}on
                     </div>
                 </div>  
         </>
