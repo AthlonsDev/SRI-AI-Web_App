@@ -4,15 +4,21 @@ import { useState } from "react";
 
 const CardForm = ({ onSend }) => {
   const [inputValue, setInputValue] = useState([""]);
-  const [searchType, setSearchType] = useState("title")
+  const [searchType, setSearchType] = useState("Title")
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
   const handleInputButtonClick = () => {
-    if (onSend) {
-      onSend(inputValue, searchType);
+    if (inputValue.length < 2){
+      alert("Input field is empty!");
+      return;
+    } 
+    else {
+      if (onSend) {
+        onSend(inputValue, searchType);
+      }
     }
   }
 
@@ -32,9 +38,9 @@ const CardForm = ({ onSend }) => {
           <div class='container-md row gx-5'>
             <div class='col'>
               <h4 class='text-center'>Search By</h4>
-                <div class="hstack gap-5">
-                  <button class='btn btn-outline-primary' onClick={handleButtonClick}>Title</button>
-                  <button class='btn btn-outline-primary' onClick={handleButtonClick}>Author</button>
+                <div class="hstack gap-5 justify-content-center">
+                  <button class='btn btn-outline-primary active' role="button" data-bs-toggle="button" aria-selected="true" onClick={handleButtonClick}>Title</button>
+                  <button class='btn btn-outline-primary' data-bs-toggle="button" onClick={handleButtonClick}>Author</button>
                   <button class='btn btn-outline-primary' onClick={handleButtonClick}>Content</button>
                 </div>
             </div>

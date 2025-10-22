@@ -32,13 +32,13 @@ export default function Home() {
                     <CardForm onSend={handleSend} />
                 </div>
                 <div class="container-fluid">
-                    <p>Found {query?.length} results</p>
+                    <p>Found {query?.length ? query?.length : "0"} results</p>
                     <div class='row row-cols-2'>
                         {query?.map((item, index) => (
                             <div key={index}>
                                     <CardItem data={item ? item :"Loading..." } onSend={handleSend}/>
                             </div>
-                        ))}on
+                        ))}
                     </div>
                 </div>  
         </>

@@ -44,12 +44,9 @@ def read_root():
 
 @app.post('/search')
 def search(data: SearchInputData):
-    # print(data.features[1])
-    print(data.features[0])
     try:
         results = search_json("SRI_Dataset.jsonl", data.features[0], data.features[1])
         return results
-              
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -68,7 +65,7 @@ async def speech_recognition(file: UploadFile = File(...)):
     print(file.filename)
 
     contents = await file.read()
-    return JSONResponse(content={"filename": file.filename, "content_size": len(contents)})
+    # return JSONResponse(content={"filename": file.filename, "content_size": len(contents)})
 
     try:
         result = transcript_audio(contents) #get results from model
