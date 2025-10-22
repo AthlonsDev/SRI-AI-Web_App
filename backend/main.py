@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 import joblib  # or pickle
 import numpy as np
-# from speech_model import load_model
+from speech_model import transcript_audio
 from search_eng import search_json
 
 
@@ -63,12 +64,15 @@ def predict(data: InputData):
         raise HTTPException(status_code=400, detail=str(e))
     
 @app.post("/speech")
-def speech_recognition(data: SpeechInputData):
-    print(data.features[0])
+async def speech_recognition(file: UploadFile = File(...)):
+    print(file.filename)
+
+    contents = await file.read()
+    return JSONResponse(content={"filename": file.filename, "content_size": len(contents)})
+
     try:
-        # audio_input = data.features[0]  # Assuming single audio input for simplicity
-        # result = model(audio_input) #get results from model
-        # return {"transcription": result['text']} #return a text of the speech
+        result = transcript_audio(contents) #get results from model
+        return {"transcription": result['text']} #return a text of the speech
         return {"message": "Speech endpoint works fine"}
     
     except Exception as e:

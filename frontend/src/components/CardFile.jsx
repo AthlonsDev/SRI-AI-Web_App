@@ -5,21 +5,16 @@ import { useState } from "react";
 
 const CardFile = (param) => {
 
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(null);
 
-  const fileHandler = (event) => {
-    setFile = event.target.files[0];
-  }
-
-  const uploadFile = () => {
-    if (!file) {
-      return;
-    }
-    uploadFileToAPI();
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
   }
 
   // file upload to backend API to be implemented
-  const uploadFileToAPI = async () => {
+  const handleUpload = async () => {
+    if (!file) return;
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -43,10 +38,10 @@ const CardFile = (param) => {
   return (
     <Card className="shadow-sm">
       <Card.Body>
-        <Card.Title class='text-center mx-auto p-2'>Upload File {file}</Card.Title>
+        <Card.Title class='text-center mx-auto p-2'>Upload File {file ? file.name : ''}</Card.Title>
           <div>
-            <input class="form-control" type="file" id="formFile" onChange={fileHandler}/>
-            <button type='button' class='btn btn-outline-secondary' onClick={uploadFileToAPI}>Upload {file}</button>
+            <input class="form-control" type="file" id="formFile" onChange={handleFileChange}/>
+            <button type='button' class='btn btn-outline-secondary' onClick={handleUpload}>Upload {file ? file.name : ''}</button>
           </div>
           <div class='container'>
                 <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">

@@ -2,7 +2,7 @@ import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from datasets import load_dataset
 
-def load_model():
+def transcript_audio(file):
     device = 'cpu' #cuda not available 
     torch_dtype = torch.float32 #float 16 for cuda but not available
 
@@ -23,5 +23,6 @@ def load_model():
         device=device
     )
 
-    
-    return pipe
+    results = pipe(file, return_timestamps=True)
+
+    return results
