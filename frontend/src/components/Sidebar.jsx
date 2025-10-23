@@ -14,12 +14,12 @@ const Sidebar = () =>  {
                 </div>
                 <div class="offcanvas-body">
                     <div class="row gy-5">
-                    <div class="p-1 bg-info" data-bs-dismiss="offcanvas">
+                    <div class="p-1" data-bs-dismiss="offcanvas">
                         {/* <button type='button' class="btn btn-link">Button 1</button> */}
                         <Link to="/">Home</Link>
                     </div>
-                    <div class="p-2 bg-info" data-bs-dismiss="offcanvas">
-                        <Link to="/model_1">Model 1</Link>
+                    <div class="p-2" data-bs-dismiss="offcanvas">
+                        <Link to="/model_1">Speech Recognition</Link>
                     </div>
                     </div>
                 </div>

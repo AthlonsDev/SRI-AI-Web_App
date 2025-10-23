@@ -3,7 +3,7 @@ import { Card } from 'react-bootstrap';
 import ModalViewText from './ModalViewText';
 import { useState } from "react";
 
-const CardFile = (param) => {
+const CardFile = () => {
 
   const [file, setFile] = useState(null);
   const [transcription, setTrascription] = useState(null);
@@ -11,6 +11,7 @@ const CardFile = (param) => {
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
+    // handleUpload();
   }
 
   // file upload to backend API to be implemented

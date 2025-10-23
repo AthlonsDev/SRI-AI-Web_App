@@ -9,19 +9,6 @@ import { useEffect, useState } from "react";
 
 
 export default function Model_1(){
-
-    const [prediction, setPrediction] = useState(null);
-
-    useEffect(() => {
-        // Example features, replace with real input
-        const features = ['example_feature1', 'example_feature2'];
-        getSpeech(features).then((data) => {
-            // setPrediction(data.message || data.prediction);
-            
-        });
-    }, []);
-
-    
     return(
         <>
         {/* Sidebar Menu */}
@@ -32,7 +19,7 @@ export default function Model_1(){
 
             {/* Load model API */}
 
-            <CardFile text={prediction ? prediction: "Loading..."}/>
+            <CardFile/>
 
         </>
     );
