@@ -11,9 +11,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# origins = ['http://localhost:8000', 'http://190.168.0.132']
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["http://localhost:5173"] for Vite
+    allow_origins=['*'],  # or ["http://localhost:5173"] for Vite
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

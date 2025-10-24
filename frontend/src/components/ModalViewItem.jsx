@@ -11,7 +11,7 @@ const ModalViewItem = ({ data, id }) => {
 
     return (
         <>
-            <div className="mx-auto p-4 text-center">
+            <div class="hstack gap-5 justify-content-center">
                 <button
                     type="button"
                     className="btn btn-outline-primary"
@@ -19,6 +19,14 @@ const ModalViewItem = ({ data, id }) => {
                     data-bs-target={`#${modalId}`}
                 >
                     View
+                </button>
+                               <button
+                    type="button"
+                    className="btn btn-outline-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target={`#${modalId}`}
+                >
+                    Link
                 </button>
             </div>
 
