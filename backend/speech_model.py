@@ -1,6 +1,6 @@
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
-from datasets import load_dataset
+
 
 def transcript_audio(file):
 
