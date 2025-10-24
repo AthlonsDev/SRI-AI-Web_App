@@ -14,15 +14,15 @@ const ModalViewItem = ({ data, id }) => {
             <div class="hstack gap-5 justify-content-center">
                 <button
                     type="button"
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-success"
                     data-bs-toggle="modal"
                     data-bs-target={`#${modalId}`}
                 >
                     View
                 </button>
-                               <button
+                <button
                     type="button"
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-success"
                     data-bs-toggle="modal"
                     data-bs-target={`#${modalId}`}
                 >
