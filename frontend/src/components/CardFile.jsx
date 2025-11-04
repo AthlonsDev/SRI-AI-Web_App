@@ -2,27 +2,30 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import ModalViewText from './ModalViewText';
 import { useState } from "react";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+
 
 const CardFile = () => {
 
   const [file, setFile] = useState(null);
   const [transcription, setTrascription] = useState(null);
+  const [loading, setLoading] = useState(false);
   
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
-    // handleUpload();
   }
 
   // file upload to backend API to be implemented
   const handleUpload = async () => {
     if (!file) return;
 
+    setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
 
    try {
-      const response = await fetch('http://localhost:8000/speech', {
+      const response = await fetch('http://10.210.133.30:8000/speech', {
         method: 'POST',
         body: formData,
       });
@@ -33,31 +36,70 @@ const CardFile = () => {
 
       const data = await response.json();
       setTrascription(data.transcription);
+      setLoading(false);
       console.log('File uploaded successfully:', data);
     } 
     catch (error) {
       console.error('Error uploading file:', error);
     }
   };
+  
+  const generateDoc = () => {
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: transcription || "No Transcription Available"
+              }),
+            ],
+          }),
+        ],
+      }],
+    });
+    return doc;
+  };
+
+  const saveDoc = async () => {
+    const doc = generateDoc();
+    const buffer = await Packer.toBlob(doc);
+
+    const url = window.URL.createObjectURL(buffer)
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = "transcription.docx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.removeObjectURL(url);
+  };
+
+  const loadingSpin = () => {
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+    </div>
+    </div>
+  }
 
   return (
     <Card className="shadow-sm">
       <Card.Body>
-        <Card.Title class='text-center mx-auto p-2'>Upload File</Card.Title>
-          <div>
+        <Card.Title class='text-center'>Upload File</Card.Title>
+          <div class="hstack gap-5 justify-content-center">
             <input class="form-control" type="file" id="formFile" onChange={handleFileChange}/>
-            <button type='button' class='btn btn-outline-secondary' onClick={handleUpload}>Upload</button>
+            <button type='button ' class='btn btn-outline-secondary' onClick={handleUpload}>Upload</button>
           </div>
-          <div class='container'>
-
-                {/* TODO: Connect progress bar to actual model loading */}
-                
-                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
+              {loading &&
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-border" role="status" aria-hidden="true"></div>
                 </div>
+              }
+          <div class='container'>
               <div class='text-center'>
                 <ModalViewText text={transcription}/>
-                <button type='button' class='btn btn-outline-primary'>Save</button>
+                <button type='button' class='btn btn-outline-primary' onClick={saveDoc}>Save</button>
               </div>
           </div>
       </Card.Body>

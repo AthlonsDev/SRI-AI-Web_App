@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL || "http://10.210.133.30:8000";
 
 export async function getSpeech(features) {
   const response = await fetch(`${API_URL}/speech`, {
