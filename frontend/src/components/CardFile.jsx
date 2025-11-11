@@ -23,9 +23,10 @@ const CardFile = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
+    const API_URL = import.meta.env.VITE_API_URL || "http://10.3.0.75:8000";
 
    try {
-      const response = await fetch('http://10.210.133.30:8000/speech', {
+      const response = await fetch(`${API_URL}/speech`, {
         method: 'POST',
         body: formData,
       });
@@ -34,13 +35,13 @@ const CardFile = () => {
         throw new Error('File upload failed');
       }
 
-      const data = await response.json();
-      setTrascription(data.transcription);
+      const data = await response.text();
+      setTrascription(data);
       setLoading(false);
       console.log('File uploaded successfully:', data);
     } 
     catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error uploading file:', error); // expects a JSON response with transcription
     }
   };
   
@@ -75,13 +76,6 @@ const CardFile = () => {
     document.body.removeChild(link);
     window.URL.removeObjectURL(url);
   };
-
-  const loadingSpin = () => {
-    <div class="d-flex justify-content-center">
-      <div class="spinner-border" role="status">
-    </div>
-    </div>
-  }
 
   return (
     <Card className="shadow-sm">

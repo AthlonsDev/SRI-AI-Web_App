@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from pydantic import BaseModel
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 import joblib  # or pickle
 from speech_model import transcript_audio
+from speech_handler import transcription
 from search_eng import search_json
 from data_visualization import load_dataframe
-
+from io import BytesIO
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -38,8 +39,6 @@ class SearchInputData(BaseModel):
     features: list[str]
 
 
-
-
 @app.get("/")
 def read_root():
     return {"message": "API is running"}
@@ -70,12 +69,15 @@ async def speech_recognition(file: UploadFile = File(...)):
     print(file.filename)
 
     contents = await file.read()
-    # return JSONResponse(content={"filename": file.filename, "content_size": len(contents)})
+    wrapped_contents = BytesIO(contents)  # Wrap binary data in BytesIO
 
     try:
-        result = transcript_audio(contents) #get results from model
-        return {"transcription": result['text']} #return a text of the speech
-    
+        result = transcription(wrapped_contents)  # Pass wrapped data to transcription
+        return PlainTextResponse(content=result)  # Return transcription as plain text
+        # return JSONResponse(content={"transcription": result})  # Wrap result in JSON
+
+
+
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
