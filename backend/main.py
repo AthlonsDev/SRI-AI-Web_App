@@ -16,7 +16,8 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],  # or ["http://localhost:5173"] for Vite
+    # allow_origins=['*'],  # or ["http://localhost:5173"] for Vite
+    allow_origins=['curl https://loca.lt/mytunnelpassword'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
