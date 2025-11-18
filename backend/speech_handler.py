@@ -109,6 +109,7 @@ def combine(input_source: Any):
         segments.append(f"{speaker}: {t}")
 
     # Return each segment on its own line
+    return "\n".join(segments)
     return "<br/>".join(segments)
 
 

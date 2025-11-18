@@ -1,16 +1,20 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
+from aws_client import connect_to_s3, upload_file
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse, PlainTextResponse
 import joblib  # or pickle
 from speech_model import transcript_audio
 from speech_handler import transcription
 from search_eng import search_json
+from ConvertToDoc import convert_to_doc
 from data_visualization import load_dataframe
 from io import BytesIO
 
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+connect_to_s3()
 
 # origins = ['http://localhost:8000', 'http://190.168.0.132']
 
@@ -74,6 +78,8 @@ async def speech_recognition(file: UploadFile = File(...)):
 
     try:
         result = transcription(wrapped_contents)  # Pass wrapped data to transcription
+        doc = convert_to_doc(result, file.filename + ".docx")  # Convert transcription to .docx
+        upload_file(doc, "username")  # Upload the file to S3 with username
         return PlainTextResponse(content=result)  # Return transcription as plain text
         # return JSONResponse(content={"transcription": result})  # Wrap result in JSON
 
