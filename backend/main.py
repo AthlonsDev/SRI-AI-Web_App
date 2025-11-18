@@ -44,10 +44,10 @@ class SearchInputData(BaseModel):
     features: list[str]
 
 
-@app.get("/")
-def read_root():
-    # objects = get_list_of_objects_in_bucket()
-    return {"message": "API is running"}
+# @app.get("/")
+# def read_root():
+#     # objects = get_list_of_objects_in_bucket()
+#     return {"message": "API is running"}
 
 @app.get("/list-files")
 def list_files():
@@ -75,7 +75,7 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@app.get("/speech")
+@app.get("/")
 async def get_buckets():
     objects = get_list_of_objects_in_bucket()
     return objects
@@ -83,9 +83,6 @@ async def get_buckets():
 @app.post("/speech")
 async def speech_recognition(file: UploadFile = File(...)):
     print(file.filename)
-
-    buckets = get_list_of_objects_in_bucket()
-
     contents = await file.read()
     wrapped_contents = BytesIO(contents)  # Wrap binary data in BytesIO
 
