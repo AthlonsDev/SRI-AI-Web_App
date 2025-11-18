@@ -7,8 +7,7 @@ import { getSpeech } from "../api";
 import axios from 'axios'
 import { useEffect, useState } from "react";
 import { use } from "react";
-
-
+import { getRoot } from "../api";
 
 
 export default function Model_1(){
