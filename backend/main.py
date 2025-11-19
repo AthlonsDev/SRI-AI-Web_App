@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
-from aws_client import connect_to_s3, upload_file, read_file_from_s3, get_list_of_objects_in_bucket
+from aws_client import upload_file, read_file_from_s3, get_list_of_objects_in_bucket, download_file_from_s3
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse, PlainTextResponse
 import joblib  # or pickle
@@ -13,8 +13,6 @@ from io import BytesIO
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
-connect_to_s3()
 
 # origins = ['http://localhost:8000', 'http://190.168.0.132']
 
@@ -79,6 +77,14 @@ async def predict(file: UploadFile = File(...)):
 async def get_buckets():
     objects = get_list_of_objects_in_bucket()
     return objects
+
+@app.get("/download/{filename}")
+def download_file(filename: str):
+    try:
+        return download_file_from_s3(filename, filename)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
     
 @app.post("/speech")
 async def speech_recognition(file: UploadFile = File(...)):

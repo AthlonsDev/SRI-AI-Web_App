@@ -1,5 +1,6 @@
 import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+import joblib
 
 
 
@@ -28,3 +29,16 @@ def load_model():
         device=device
     )
     return pipe
+
+
+# def save_model(pipe, filename="whisper_model.pt"):
+#     torch.save(pipe, filename)
+
+# def save_model_pkl(pipe, filename="whisper_model.pkl"):
+#     joblib.dump(pipe, filename)
+
+# def main():
+#     pipe = load_model()
+#     # save_model(pipe)
+#     save_model_pkl(pipe)
+# main()
