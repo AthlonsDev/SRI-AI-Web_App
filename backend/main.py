@@ -19,7 +19,6 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],  # or ["http://localhost:5173"] for Vite
     allow_origins=['https://main.d2m6wa3x69pn92.amplifyapp.com/'],
     allow_credentials=True,
     allow_methods=["*"],
