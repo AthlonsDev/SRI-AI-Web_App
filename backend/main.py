@@ -9,6 +9,7 @@ from search_eng import search_json
 from ConvertToDoc import convert_to_doc
 from data_visualization import load_dataframe
 from io import BytesIO
+import os
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -96,6 +97,8 @@ async def speech_recognition(file: UploadFile = File(...)):
         result = transcription(wrapped_contents)  # Pass wrapped data to transcription
         doc = convert_to_doc(result, file.filename + ".docx")  # Convert transcription to .docx
         upload_file(doc, "username")  # Upload the file to S3 with username
+        # delete doc file after upload
+        os.remove(doc)
         res = result.replace("\n", "</br>")  # Replace newlines with HTML line breaks
         return PlainTextResponse(content=res)  # Return transcription as plain text
         # return JSONResponse(content={"transcription": result})  # Wrap result in JSON
