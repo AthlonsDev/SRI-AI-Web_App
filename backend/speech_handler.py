@@ -9,6 +9,14 @@ import torchaudio
 from whisper import load_model
 from diarization import init_diarization
 
+import boto3
+import json
+
+
+runtime = boto3.client("sagemaker-runtime")
+
+
+
 
 def _load_audio_input(
     source: Union[str, Path, os.PathLike, io.IOBase, Mapping, torch.Tensor],
@@ -80,10 +88,31 @@ def _load_audio_input(
 
     return waveform, int(sample_rate)
 
+# Diarization via SageMaker endpoint call
+# Diarization now runs on sagemaker
+def diarize(payload):
+    # sagemaker endpoint call to diarization model
+    response = runtime.invoke_endpoint(
+        EndpointName = "diarization-endpoint",
+        ContentType = "application/json",
+        Body = json.dumps(payload)
+    )
+    return json.loads(response['Body'].read().decode())
+
+def whisper(payload):
+    # sagemaker endpoint call to whisper model
+    response = runtime.invoke_endpoint(
+        EndpointName = "whisper-endpoint",
+        ContentType = "application/json",
+        Body = json.dumps(payload)
+    )
+    return json.loads(response['Body'].read().decode())
+
 
 def combine(input_source: Any):
     segments = []
-    d = init_diarization(input_source)
+    # d = init_diarization(input_source) #local inference
+    d = diarize({"audio": input_source}) #sagemaker inference
     if d is None:
         print("Diarization failed")
         return
@@ -102,7 +131,8 @@ def combine(input_source: Any):
         torchaudio.save("temp_seg.wav", segment_audio, sample_rate)
 
         print('start transcription...')
-        w_pipe = load_model()
+        # w_pipe = load_model()
+        w_pipe = whisper({"audio": "temp_seg.wav"})  #sagemaker inference
         output = w_pipe("temp_seg.wav")
         t = output["text"]
 
