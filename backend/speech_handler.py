@@ -93,7 +93,7 @@ def _load_audio_input(
 def diarize(payload):
     # sagemaker endpoint call to diarization model
     response = runtime.invoke_endpoint(
-        EndpointName = "diarization-endpoint",
+        EndpointName = "huggingface-pytorch-inference-2025-11-24-11-34-22-635",
         ContentType = "application/json",
         Body = json.dumps(payload)
     )
@@ -102,7 +102,7 @@ def diarize(payload):
 def whisper(payload):
     # sagemaker endpoint call to whisper model
     response = runtime.invoke_endpoint(
-        EndpointName = "whisper-endpoint",
+        EndpointName = "whisper-small-CPU",
         ContentType = "application/json",
         Body = json.dumps(payload)
     )
