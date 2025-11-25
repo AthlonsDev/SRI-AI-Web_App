@@ -6,16 +6,11 @@ from typing import Any, Mapping, Tuple, Union, cast
 
 import torch
 import torchaudio
-from whisper import load_model
-from diarization import init_diarization
-
+from whisper_end import query_endpoint
+# from diarization import init_diarization
+from diarization_end import diarize
 import boto3
 import json
-
-
-runtime = boto3.client("sagemaker-runtime")
-
-
 
 
 def _load_audio_input(
@@ -90,23 +85,32 @@ def _load_audio_input(
 
 # Diarization via SageMaker endpoint call
 # Diarization now runs on sagemaker
-def diarize(payload):
+def diarize_quick(payload):
     # sagemaker endpoint call to diarization model
-    response = runtime.invoke_endpoint(
-        EndpointName = "huggingface-pytorch-inference-2025-11-24-11-34-22-635",
+    client = boto3.client(
+            'sagemaker-runtime',
+            aws_access_key_id='AKIA5N6KSCCMOEUZ4IWX',
+            aws_secret_access_key='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',
+            region_name='eu-north-1',
+        )
+    print("Diarization payload prepared")
+    response = client.invoke_endpoint(
+        EndpointName = 'Endpoint-20251125-131122',
         ContentType = "application/json",
-        Body = json.dumps(payload)
+        Body = json.dumps(payload),
+        InferenceComponentName="huggingface-pytorch-inference-2025-11-25-12-16-20251125-1313150"
     )
+    print("Diarization response received")
     return json.loads(response['Body'].read().decode())
 
-def whisper(payload):
-    # sagemaker endpoint call to whisper model
-    response = runtime.invoke_endpoint(
-        EndpointName = "whisper-small-CPU",
-        ContentType = "application/json",
-        Body = json.dumps(payload)
-    )
-    return json.loads(response['Body'].read().decode())
+# def whisper(payload):
+#     # sagemaker endpoint call to whisper model
+#     response = runtime.invoke_endpoint(
+#         EndpointName = "whisper-small-CPU",
+#         ContentType = "application/json",
+#         Body = json.dumps(payload)
+#     )
+#     return json.loads(response['Body'].read().decode())
 
 
 def combine(input_source: Any):
@@ -132,7 +136,7 @@ def combine(input_source: Any):
 
         print('start transcription...')
         # w_pipe = load_model()
-        w_pipe = whisper({"audio": "temp_seg.wav"})  #sagemaker inference
+        w_pipe = read_audio_file({"audio": "temp_seg.wav"})  #sagemaker inference
         output = w_pipe("temp_seg.wav")
         t = output["text"]
 
@@ -143,9 +147,34 @@ def combine(input_source: Any):
     return "<br/>".join(segments)
 
 
-def transcription(file_input: Any):
+def transcription(filename: str, model_type):
     """Public transcription entrypoint.
 
-    Accepts the same input forms documented earlier (path, file-like, mapping, waveform dict).
+    # Accepts the same input forms documented earlier (path, file-like, mapping, waveform dict).
     """
-    return combine(file_input)
+    if model_type == "diarization":
+        print('using diarization...')
+        # result = combine(filename)
+        diarize_quick("temp_harvard.wav")
+        return "diarization complete"
+
+    print('model type:', model_type)
+
+    # run only transcription
+    print('using whisper only...')
+    file_path = filename
+    with open(file_path, "rb") as file:
+        wav_file_read = file.read()
+    payload = {
+        "audio_input": wav_file_read.hex(),
+        "language": "english",
+        "task": "transcribe"
+    }
+
+    result = query_endpoint(json.dumps(payload).encode('utf-8'), "application/json")
+    # return result
+    return result
+
+if __name__ == "__main__":
+    # test transcription with diarization
+    diarize_quick("backend\\temp_harvard.wav")

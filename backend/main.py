@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
-from aws_client import upload_file, read_file_from_s3, get_list_of_objects_in_bucket, download_file_from_s3
+from aws_client import upload_doc, read_file_from_s3, get_list_of_objects_in_bucket, download_file_from_s3
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse, PlainTextResponse
 import joblib  # or pickle
@@ -19,7 +19,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['https://main.d2m6wa3x69pn92.amplifyapp.com/'],
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -47,10 +47,10 @@ class SearchInputData(BaseModel):
 #     # objects = get_list_of_objects_in_bucket()
 #     return {"message": "API is running"}
 
-@app.get("/list-files")
-def list_files():
-    objects = get_list_of_objects_in_bucket()
-    return {"objects": objects}
+# @app.get("/list-files")
+# def list_files():
+#     objects = get_list_of_objects_in_bucket()
+#     return {"objects": objects}
 
 @app.post('/search')
 def search(data: SearchInputData):
@@ -87,17 +87,22 @@ def download_file(filename: str):
 
     
 @app.post("/speech")
-async def speech_recognition(file: UploadFile = File(...)):
+async def speech_recognition(file: UploadFile = File(...), model_type: str = "transcription"):
     print(file.filename)
-    contents = await file.read()
-    wrapped_contents = BytesIO(contents)  # Wrap binary data in BytesIO
+    # Save uploaded file to disk
+    file_path = f"temp_{file.filename}"
+    with open(file_path, "wb") as f:
+        f.write(await file.read())
 
     try:
-        result = transcription(wrapped_contents)  # Pass wrapped data to transcription
+        upload_doc(file_path, "audio")
+        # contents = await file.read()
+        result = transcription(file.filename, model_type=model_type)  # Pass wrapped data to transcription
         doc = convert_to_doc(result, file.filename + ".docx")  # Convert transcription to .docx
-        upload_file(doc, "username")  # Upload the file to S3 with username
+        upload_doc(doc, "username")  # Upload the file to S3 with username
         # delete doc file after upload
         os.remove(doc)
+        os.remove(file_path)
         res = result.replace("\n", "</br>")  # Replace newlines with HTML line breaks
         return PlainTextResponse(content=res)  # Return transcription as plain text
         # return JSONResponse(content={"transcription": result})  # Wrap result in JSON
