@@ -24,7 +24,7 @@ def query_endpoint(body, content_type):
     response = client.invoke_endpoint(EndpointName=endpoint_name, ContentType=content_type, Body=body)
     model_predictions = json.loads(response['Body'].read())
     text = model_predictions['text']
-    print(f"Text: {text}")
+    # print(f"Text: {text}")
 
     # If you receive client error (413) please check the payload size to the endpoint. Payloads for SageMaker invoke endpoint requests are limited to about 5MB
     # query_endpoint(wav_file_read, "audio/wav")

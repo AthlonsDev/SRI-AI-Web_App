@@ -152,16 +152,16 @@ def transcription(filename: str, model_type):
 
     # Accepts the same input forms documented earlier (path, file-like, mapping, waveform dict).
     """
-    if model_type == "diarization":
+    if model_type == "meeting":
         print('using diarization...')
         # result = combine(filename)
         diarize_quick("temp_harvard.wav")
         return "diarization complete"
 
-    print('model type:', model_type)
+    # print('model type:', model_type)
 
     # run only transcription
-    print('using whisper only...')
+    print('using whisper only...', filename)
     file_path = filename
     with open(file_path, "rb") as file:
         wav_file_read = file.read()
@@ -173,8 +173,9 @@ def transcription(filename: str, model_type):
 
     result = query_endpoint(json.dumps(payload).encode('utf-8'), "application/json")
     # return result
+    print(result)
     return result
 
-if __name__ == "__main__":
-    # test transcription with diarization
-    diarize_quick("backend\\temp_harvard.wav")
+# if __name__ == "__main__":
+#     # test transcription with diarization
+#     diarize_quick("backend\\temp_harvard.wav")

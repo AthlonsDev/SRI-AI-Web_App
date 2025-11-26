@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form
 from aws_client import upload_doc, read_file_from_s3, get_list_of_objects_in_bucket, download_file_from_s3
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -87,26 +87,36 @@ def download_file(filename: str):
 
     
 @app.post("/speech")
-async def speech_recognition(file: UploadFile = File(...), model_type: str = "transcription"):
-    print(file.filename)
+async def speech_recognition(file: UploadFile = File(...), model_type: str = Form(...)):
+
     # Save uploaded file to disk
-    file_path = f"temp_{file.filename}"
+    file_path = file.filename
     with open(file_path, "wb") as f:
         f.write(await file.read())
 
     try:
-        upload_doc(file_path, "audio")
-        # contents = await file.read()
-        result = transcription(file.filename, model_type=model_type)  # Pass wrapped data to transcription
-        doc = convert_to_doc(result, file.filename + ".docx")  # Convert transcription to .docx
-        upload_doc(doc, "username")  # Upload the file to S3 with username
-        # delete doc file after upload
+        print("Starting transcription...")
+        print(model_type)
+        result = transcription(file.filename, model_type=model_type)
+        print(f"Transcription result type: {type(result)}")
+        print(f"Transcription result: {result}")
+        
+        print("Converting to doc...")
+        doc = convert_to_doc(result, file.filename + ".docx")
+        print(f"Doc file: {doc}")
+        
+        print("Uploading to S3...")
+        upload_doc(doc, "username")
+        
         os.remove(doc)
         os.remove(file_path)
-        res = result.replace("\n", "</br>")  # Replace newlines with HTML line breaks
-        return PlainTextResponse(content=res)  # Return transcription as plain text
-        # return JSONResponse(content={"transcription": result})  # Wrap result in JSON
+        
+        return result
+    
     except Exception as e:
+        print(f"Error details: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=400, detail=str(e))
 
 # To run the app, use: uvicorn backend.main:app --reload
