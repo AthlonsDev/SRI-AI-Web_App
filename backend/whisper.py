@@ -44,3 +44,8 @@ def load_model():
 #     # save_model(pipe)
 #     save_model_pkl(pipe)
 # main()
+
+# The speech recognition tool is mostly done, I just need to port it to the AWS environment to be publicly available.
+# About the Biurbs application
+# I will also add a system to allow for new data to be added dynamically.
+# This will allow the model to learn from new data and improve its performance over time.

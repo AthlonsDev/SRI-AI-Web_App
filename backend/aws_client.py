@@ -40,7 +40,7 @@ def upload_audio(filename:str, username:str):
         print(f"Error uploading file: {e}")
 
 def get_list_of_objects_in_bucket():
-    s3 = connect_to_s3_client()
+    s3 = connect_to_s3_client()  # Changed from connect_to_s3_resource()
     try:
         response = s3.list_objects_v2(Bucket='sribucket00')
         

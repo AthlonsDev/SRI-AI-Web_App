@@ -83,7 +83,6 @@ async def speech_recognition(file: UploadFile = File(...), model_type: str = For
         result = transcription(file.filename, model_type=model_type)
         print(f"Transcription result type: {type(result)}")
         print(f"Transcription result: {result}")
-
         print("Converting to doc...")
         doc = convert_to_doc(result, file.filename + ".docx")
         print(f"Doc file: {doc}")

@@ -137,6 +137,8 @@ def transcription(filename: str, model_type):
 
     # using Sagemaker Inference
 
+    # using Sagemaker Inference
+        
     # run only transcription
     # print('using whisper only...', filename)
     # file_path = filename
