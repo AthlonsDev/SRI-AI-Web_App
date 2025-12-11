@@ -28,6 +28,8 @@ def load_model():
         torch_dtype=torch_dtype,
         device=device
     )
+
+    
     return pipe
 
 
