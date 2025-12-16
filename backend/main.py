@@ -1,15 +1,13 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile, Form
-from aws_client import upload_doc, read_file_from_s3, get_list_of_objects_in_bucket, download_file_from_s3
+from aws_client import upload_doc, download_file_from_s3, disconnect_instance
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse, PlainTextResponse
-import joblib  # or pickle
-from speech_model import transcript_audio
 from speech_handler import transcription
 from search_eng import search_json
 from ConvertToDoc import convert_to_doc
 from data_visualization import load_dataframe
-from io import BytesIO
 import os
+import time
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -68,7 +66,6 @@ def download_file(filename: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    
 @app.post("/speech")
 async def speech_recognition(file: UploadFile = File(...), model_type: str = Form(...)):
 
@@ -92,6 +89,10 @@ async def speech_recognition(file: UploadFile = File(...), model_type: str = For
 
         os.remove(doc)
         os.remove(file_path)
+        time.sleep(10)
+
+        if not flag:
+            disconnect_instance()
 
         return result
     

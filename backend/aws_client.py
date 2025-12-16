@@ -99,7 +99,21 @@ def read_audio_file(filename):
            "language": "english",
            "task": "transcribe"}
     
-    # query_endpoint(json.dumps(payload).encode('utf-8'), "application/json")
+def connect_to_ec2_client():
+    ec2 = boto3.client(
+        'ec2',
+        aws_access_key_id='AKIA5N6KSCCMOEUZ4IWX',
+        aws_secret_access_key='Y6U1y9eyUyW6SEApCTvqxMSSMHb0nrnaEiMr/uIi',
+        region_name='eu-west-2',
+    )
+    return ec2
     
-# print(read_file_from_s3('requirements'))  # Example usage
-# print(get_list_of_objects_in_bucket())  # Example usage
+def disconnect_instance():
+    instance_id = "i-0bf142084501c4b62"
+    ec2 = connect_to_ec2_client()
+
+    ec2.stop_instances(InstanceIds=[instance_id])
+    return {
+        "status": "stopping",
+        "instance_id": instance_id
+    }
