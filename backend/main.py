@@ -49,7 +49,13 @@ def read_root():
 
 @app.get("/download/{filename}")
 def download_file(filename: str):
-    return JSONResponse(content={"filename": filename})
+    file_path = filename
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            file_data = f.read()
+        return PlainTextResponse(content=file_data, media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    else:
+        raise HTTPException(status_code=404, detail="File not found")
 
 @app.post("/speech")
 async def speech_recognition(file: UploadFile = File(...), model_type: str = Form(...)):
@@ -67,8 +73,8 @@ async def speech_recognition(file: UploadFile = File(...), model_type: str = For
         print(f"Transcription result type: {type(result)}")
         print(f"Transcription result: {result}")
         print("Converting to doc...")
-        # doc = convert_to_doc(result, file.filename + ".docx")
-        # print(f"Doc file: {doc}")
+        doc = convert_to_doc(result, file.filename + ".docx")
+        print(f"Doc file: {doc}")
 
         # print("Uploading to S3...")
         # upload_doc(doc, "username")
