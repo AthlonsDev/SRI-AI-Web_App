@@ -1,5 +1,4 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile, Form
-from aws_client import upload_doc, download_file_from_s3, disconnect_instance
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse, PlainTextResponse
 from speech_handler import transcription
@@ -43,28 +42,14 @@ class SpeechInputData(BaseModel):
 class SearchInputData(BaseModel):
     features: list[str]
 
-
-# @app.get("/")
-# def read_root():
-#     # objects = get_list_of_objects_in_bucket()
-#     return {"message": "API is running"}
-
-# @app.get("/list-files")
-# def list_files():
-#     objects = get_list_of_objects_in_bucket()
-#     return {"objects": objects}
-
-    
 @app.get("/")
-async def get_buckets():
+def read_root():
     return {"message": "API is running"}
+
 
 @app.get("/download/{filename}")
 def download_file(filename: str):
-    try:
-        return download_file_from_s3(filename, filename)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    return JSONResponse(content={"filename": filename})
 
 @app.post("/speech")
 async def speech_recognition(file: UploadFile = File(...), model_type: str = Form(...)):
@@ -78,21 +63,19 @@ async def speech_recognition(file: UploadFile = File(...), model_type: str = For
         print("Starting transcription...")
         print(model_type)
         result = transcription(file.filename, model_type=model_type)
+        
         print(f"Transcription result type: {type(result)}")
         print(f"Transcription result: {result}")
         print("Converting to doc...")
-        doc = convert_to_doc(result, file.filename + ".docx")
-        print(f"Doc file: {doc}")
+        # doc = convert_to_doc(result, file.filename + ".docx")
+        # print(f"Doc file: {doc}")
 
-        print("Uploading to S3...")
-        upload_doc(doc, "username")
+        # print("Uploading to S3...")
+        # upload_doc(doc, "username")
 
-        os.remove(doc)
-        os.remove(file_path)
-        time.sleep(10)
-
-        if not flag:
-            disconnect_instance()
+        # os.remove(doc)
+        # os.remove(file_path)
+        # time.sleep(10)
 
         return result
     

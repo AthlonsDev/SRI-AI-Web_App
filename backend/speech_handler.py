@@ -6,10 +6,8 @@ from typing import Any, Mapping, Tuple, Union, cast
 import torch
 import torchaudio
 from whisper import load_model
-from whisper_end import query_endpoint
 from diarization import init_diarization
 # from diarization_end import diarize
-import boto3
 import json
 
 
@@ -133,28 +131,5 @@ def transcription(filename: str, model_type):
         # only use whisper
         whisper = load_model()
         result = whisper(filename, return_timestamps=True)
+        result = result['text']
         return result
-
-    # using Sagemaker Inference
-
-    # using Sagemaker Inference
-        
-    # run only transcription
-    # print('using whisper only...', filename)
-    # file_path = filename
-    # with open(file_path, "rb") as file:
-    #     wav_file_read = file.read()
-    # payload = {
-    #     "audio_input": wav_file_read.hex(),
-    #     "language": "english",
-    #     "task": "transcribe"
-    # }
-
-    # result = query_endpoint(json.dumps(payload).encode('utf-8'), "application/json")
-    # # return result
-    # print(result)
-    # return result
-
-# if __name__ == "__main__":
-#     # test transcription with diarization
-#     diarize_quick("backend\\temp_harvard.wav")
